@@ -1,0 +1,9 @@
+*.class
+/log
+/bin
+.classpath
+.DS_Store
+.project
+.settings
+.svn
+.svn/
