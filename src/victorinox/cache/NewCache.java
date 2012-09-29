@@ -16,8 +16,6 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.springframework.stereotype.Repository;
-
 import victorinox.util.CalcSizeOf;
 
 /**
@@ -25,7 +23,6 @@ import victorinox.util.CalcSizeOf;
  * @author KevinLiao
  *
  */
-@Repository("newCache")
 public class NewCache
 {
 	private static final long THRESHOLD = 60 * 1000; // 每次trigger查询的时间范围，单位s

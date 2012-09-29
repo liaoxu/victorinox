@@ -11,13 +11,11 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import victorinox.blocks.NewArrayList;
 import victorinox.blocks.NewIntArrayList;
 import victorinox.util.CalcSizeOf;
 
-@Repository("cache")
 public class NewCacheProxy implements Cache
 {
 
@@ -431,7 +429,7 @@ public class NewCacheProxy implements Cache
 			if (c.isAssignableFrom(val.getClass()))
 				return;
 		}
-//		throw new Exception("invalid type " + val.getClass());
+		//		throw new Exception("invalid type " + val.getClass());
 	}
 
 	@Override
