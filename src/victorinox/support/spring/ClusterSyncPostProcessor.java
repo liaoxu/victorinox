@@ -22,14 +22,14 @@ import victorinox.clustersync.ZkPool;
  * @author liaoxu
  *
  */
-public class ClusterSyncPostProcess implements BeanPostProcessor,
+public class ClusterSyncPostProcessor implements BeanPostProcessor,
 		ApplicationContextAware {
 
 	
 	private final Log logger = LogFactory.getLog(getClass());
 	private ApplicationContext context;
-	String znodePrefix = "cluster_lock";
-	ZKConf zkConf = null;
+	private String znodePrefix = "cluster_lock";
+	private ZKConf zkConf = null;
 	
 	@Override
 	public void setApplicationContext(ApplicationContext context)
@@ -87,7 +87,7 @@ public class ClusterSyncPostProcess implements BeanPostProcessor,
 	}
 	
 	@Around("@annotation(victorinox.annotation.ClusterSync) && @annotation(clusterSync)")
-	public Object doBeforeZkMethod(ProceedingJoinPoint pjp, ClusterSync clusterSync) throws Throwable{
+	public Object clusterSyncMethodWrapper(ProceedingJoinPoint pjp, ClusterSync clusterSync) throws Throwable{
 		String rootDirectory = clusterSync.path();
 //		System.out.println("doBeforeZkMethod, " + rootDirectory + ", " + znodePrefix);
 		ZKCandidate zkClient = (ZKCandidate) ZkPool.get(rootDirectory, znodePrefix);
@@ -112,4 +112,11 @@ public class ClusterSyncPostProcess implements BeanPostProcessor,
 		return null;
 	}
 	
+	public void setZnodePrefix(String znodePrefix) {
+		this.znodePrefix = znodePrefix;
+	}
+
+	public void setZkConf(ZKConf zkConf) {
+		this.zkConf = zkConf;
+	}
 }
