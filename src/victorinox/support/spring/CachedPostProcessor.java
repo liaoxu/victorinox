@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import victorinox.annotation.Cached;
+import victorinox.blocks.CacheResult;
 import victorinox.cache.Cache;
 
 public class CachedPostProcessor implements BeanPostProcessor,
@@ -31,24 +32,34 @@ public class CachedPostProcessor implements BeanPostProcessor,
 		this.cache = cache;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Around(ANNOTATION)
-	public Object cacheMethodWrapper(ProceedingJoinPoint pjp, Cached cached) {
-		pjp.getSignature();
-		return pjp.proceed();
+	public CacheResult cacheMethodWrapper(ProceedingJoinPoint pjp, Cached cached) {
+		// get the key of cache
+		String key = pjp.getSignature().toLongString();
+		if (cache.containsKey(key)) {
+			return (CacheResult) cache.get(key);
+		}
+		try {
+			CacheResult result = (CacheResult) pjp.proceed();
+			cache.set(key, result);
+			return result;
+		} catch (Throwable e) {
+			logger.error("error occurs while wrap cacheMethod annotation", e);
+			return null;
+		}
 	}
 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName)
 			throws BeansException {
-		// TODO Auto-generated method stub
-		return null;
+		return bean;
 	}
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
 			throws BeansException {
-		// TODO Auto-generated method stub
-		return null;
+		return bean;
 	}
 
 }

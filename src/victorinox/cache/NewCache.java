@@ -109,9 +109,7 @@ public class NewCache
 		public int compareTo(Delayed o)
 		{
 			if (o == this)
-			{
-				return 0;
-			}
+				return 0;	
 			long diff = this.getDelay(TimeUnit.MILLISECONDS) - o.getDelay(TimeUnit.MILLISECONDS);
 			return ((diff == 0) ? 0 : ((diff < 0) ? -1 : 1));
 		}
